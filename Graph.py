@@ -4,7 +4,11 @@ class Graph:
     def __init__(self,vnum):
         self.v=vnum
         self.adjlist={}
+        for i in range(self.v):
+            self.adjlist.setdefault(i,[]).append(0)
+            self.adjlist[i].remove(0)
         self.e = 0
+        self.alledges={}
 
     def randominit(self):
         for i in range(self.v):
@@ -20,7 +24,7 @@ class Graph:
         self.adjlist.setdefault(u,[]).append([v,weight])
         self.adjlist.setdefault(v,[]).append([u,weight])
         self.e+=1
-
+        self.alledges[u,v]=weight
     def edgeexist(self,u,v):
         flag=False
         for edges in self.adjlist[v]:
@@ -37,10 +41,10 @@ class Graph:
             degree += len(value)
         return degree
 
-    def alledges(self):
-        edges={}
-        for key, item in self.adjlist.items():
-            for edge in item:
-                if (edge[0], key) not in list(edges.keys()):
-                    edges[key,edge[0]]=edge[1]
-        return edges
+    # def alledges(self):
+    #     edges={}
+    #     for key, item in self.adjlist.items():
+    #         for edge in item:
+    #             if (edge[0], key) not in list(edges.keys()):
+    #                 edges[key,edge[0]]=edge[1]
+    #     return edges

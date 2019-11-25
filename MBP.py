@@ -33,7 +33,7 @@ def DijkstraNoheap(g,s,t):
                 dad[w]=maxv
                 wt[w]=min(wt[maxv],edge[1])
     print("using Dijkstra without heap")
-    print("the max bandwidth path of vertex%d is : %d"%(t,wt[t]))
+    print("the max bandwidth path from vertex%d to vertex%d is : %d"%(s,t,wt[t]))
     # path=[]
     # repath=[]
     # while t!=s:
@@ -78,7 +78,7 @@ def Dijkstraheap(g,s,t):
                 heap.Delete(w)
                 heap.Insert(w, wt[w])
     print("using Dijkstra with heap")
-    print("the max bandwidth path of vertex%d is : %d"%(t,wt[t]))
+    print("the max bandwidth path from vertex%d to vertex%d is : %d"%(s,t,wt[t]))
     # path=[]
     # repath=[]
     # while t!=s:
@@ -102,8 +102,13 @@ def Kruskal(g,s,t):
             rank[u]+=1
     def Find(v):
         w=v
+        s=[]
         while dad[w]!=-1:
             w=dad[w]
+        #     s.append(w)
+        # while(len(s)):
+        #     v=s.pop()
+        #     dad[v]=w
         return w
     def MakeSet(v):
         dad[v]=-1
@@ -111,21 +116,29 @@ def Kruskal(g,s,t):
 
     #Build heap
     heap = Heap.MaxHeap()
-    for edge,w in g.alledges().items():
-        heap.Insert(edge,w)
+    edges=g.alledges.items()
+    #print(edges)
+    for edge,w in edges:
+        heap.H.append(edge)
+        heap.D.append(w)
+        heap.n+=1
+    print("finish init")
     #sort
     sorted_edge=[]
-    for i in range(heap.n):
-        max=heap.Max()
-        sorted_edge.append(max)
-        heap.Delete(max[0])
-
+    # for i in range(heap.n):
+    #     max=heap.Max()
+    #     sorted_edge.append(max)
+    #     heap.Delete(max[0])
+    heap.HeapSort()
+    for i in range(1,heap.n+1):
+        sorted_edge.append((heap.H[i],heap.D[i]))
+    #print(sorted_edge)
     for i in range(g.v):
         MakeSet(i)
-    T=[]
+    print("finish heap sort")
     MST=Graph.Graph(g.v)
-    while(len(sorted_edge)):
-        edge=sorted_edge.pop(0)
+    while(len(sorted_edge)):# and t not in path(MST,s,t)[0]:
+        edge=sorted_edge.pop(-1)
         u=edge[0][0]
         v=edge[0][1]
         w=edge[1]
@@ -134,9 +147,10 @@ def Kruskal(g,s,t):
         if ru!=rv:
             Union(ru,rv)
             MST.addedge(u,v,w)
+    #print(MST.adjlist)
     Path=path(MST,s,t)
     print("using Kruskal")
-    print("the max bandwidth path of vertex%d is : %d"%(t,Path[1]))
+    print("the max bandwidth path from vertex%d to vertex%d is : %d"%(s,t,Path[1]))
     # print(Path[0])
 
 def path(g,s,t):
@@ -151,22 +165,25 @@ def path(g,s,t):
     return path,wt[t]
 
 def DFS(g,v,t,color,path,wt):
-    if v==t:
-        #path.append(t)
-        #wt[t] = min(wt[v],g.alledges())
+        if v==t:
+            #path.append(t)
+            #wt[t] = min(wt[v],g.alledges())
+            return path,wt[t]
+        color[v]="grey"
+    #if g.adjlist[v]:
+        #print(g.adjlist[v])
+        for edge in g.adjlist[v]:
+            #if len(edge):
+                #print(1)
+                if color[edge[0]]=="white":
+                    wt[edge[0]] = min(wt[v], edge[1])
+                    path.append(edge[0])
+                    path,wt[t]=DFS(g,edge[0],t,color,path,wt)
+                    if t in path:
+                        return path,wt[t]
+        color[v]="black"
+        path.remove(v)
         return path,wt[t]
-    color[v]="grey"
-    for edge in g.adjlist[v]:
-        #if edge[0]==v:
-            if color[edge[0]]=="white":
-                wt[edge[0]] = min(wt[v], edge[1])
-                path.append(edge[0])
-                path,wt[t]=DFS(g,edge[0],t,color,path,wt)
-                if t in path:
-                    return path,wt[t]
-    color[v]="black"
-    path.remove(v)
-    return path,wt[t]
 
 # g=Graph.Graph(7)
 # g.adjlist={0:[[1,12],[5,16],[6,14]],
@@ -176,6 +193,18 @@ def DFS(g,v,t,color,path,wt):
 #                      4:[[3,4],[5,2],[6,8],[2,5]],
 #                      5:[[0,16],[1,7],[2,6],[4,2],[6,9]],
 #                      6:[[0,14],[5,9],[4,8]]}
-# DijkstraNoheap(g,1,5)
-# Dijkstraheap(g,1,5)
-# Kruskal(g,1,5)
+# g.alledges[0,1]=12
+# g.alledges[0,5]=16
+# g.alledges[0,6]=14
+# g.alledges[1,2]=10
+# g.alledges[1,5]=7
+# g.alledges[2,5]=6
+# g.alledges[2,3]=3
+# g.alledges[3,4]=4
+# g.alledges[4,6]=8
+# g.alledges[5,6]=9
+# g.alledges[4,5]=2
+# g.alledges[2,4]=5
+# DijkstraNoheap(g,5,2)
+# Dijkstraheap(g,5,2)
+# Kruskal(g,5,4)

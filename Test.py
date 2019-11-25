@@ -6,8 +6,8 @@ import Heap
 import random
 def main():
     vnum=5000
-    g=randomgraph.generatefirst(vnum)
-    #g=randomgraph.generatesecond(vnum)
+    #g=randomgraph.generatefirst(vnum)
+    g=randomgraph.generatesecond(vnum)
     print("finish generate")
     s=random.randint(0,vnum-1)
     t=random.randint(0,vnum-1)
