@@ -33,7 +33,8 @@ def DijkstraNoheap(g,s,t):
                 dad[w]=maxv
                 wt[w]=min(wt[maxv],edge[1])
     print("using Dijkstra without heap")
-    print("the max bandwidth path from vertex%d to vertex%d is : %d"%(s,t,wt[t]))
+    print("the max bandwidth path from vertex%d to vertex%d is : %s"%(s,t,wt[t]))
+    return s,t,wt[t]
     # path=[]
     # repath=[]
     # while t!=s:
@@ -63,6 +64,7 @@ def Dijkstraheap(g,s,t):
         #pick the max wt[v]
         maxv=heap.Max()[0]
         status[maxv]="intree"
+        #print(maxv)
         heap.Delete(maxv)
         edges=g.adjlist[maxv]
         for edge in edges:
@@ -78,7 +80,8 @@ def Dijkstraheap(g,s,t):
                 heap.Delete(w)
                 heap.Insert(w, wt[w])
     print("using Dijkstra with heap")
-    print("the max bandwidth path from vertex%d to vertex%d is : %d"%(s,t,wt[t]))
+    print("the max bandwidth path from vertex%d to vertex%d is : %s"%(s,t,wt[t]))
+    return s, t, wt[t]
     # path=[]
     # repath=[]
     # while t!=s:
@@ -122,20 +125,16 @@ def Kruskal(g,s,t):
         heap.H.append(edge)
         heap.D.append(w)
         heap.n+=1
-    print("finish init")
+    #print("finish init")
     #sort
     sorted_edge=[]
-    # for i in range(heap.n):
-    #     max=heap.Max()
-    #     sorted_edge.append(max)
-    #     heap.Delete(max[0])
     heap.HeapSort()
     for i in range(1,heap.n+1):
         sorted_edge.append((heap.H[i],heap.D[i]))
     #print(sorted_edge)
     for i in range(g.v):
         MakeSet(i)
-    print("finish heap sort")
+    #print("finish heap sort")
     MST=Graph.Graph(g.v)
     while(len(sorted_edge)):# and t not in path(MST,s,t)[0]:
         edge=sorted_edge.pop(-1)
@@ -150,7 +149,8 @@ def Kruskal(g,s,t):
     #print(MST.adjlist)
     Path=path(MST,s,t)
     print("using Kruskal")
-    print("the max bandwidth path from vertex%d to vertex%d is : %d"%(s,t,Path[1]))
+    print("the max bandwidth path from vertex%d to vertex%d is : %s"%(s,t,Path[1]))
+    return s, t, Path[1]
     # print(Path[0])
 
 def path(g,s,t):
@@ -166,15 +166,9 @@ def path(g,s,t):
 
 def DFS(g,v,t,color,path,wt):
         if v==t:
-            #path.append(t)
-            #wt[t] = min(wt[v],g.alledges())
             return path,wt[t]
         color[v]="grey"
-    #if g.adjlist[v]:
-        #print(g.adjlist[v])
         for edge in g.adjlist[v]:
-            #if len(edge):
-                #print(1)
                 if color[edge[0]]=="white":
                     wt[edge[0]] = min(wt[v], edge[1])
                     path.append(edge[0])
@@ -184,7 +178,7 @@ def DFS(g,v,t,color,path,wt):
         color[v]="black"
         path.remove(v)
         return path,wt[t]
-
+#
 # g=Graph.Graph(7)
 # g.adjlist={0:[[1,12],[5,16],[6,14]],
 #                      1:[[0,12],[2,10],[5,7]],
@@ -205,6 +199,6 @@ def DFS(g,v,t,color,path,wt):
 # g.alledges[5,6]=9
 # g.alledges[4,5]=2
 # g.alledges[2,4]=5
-# DijkstraNoheap(g,5,2)
-# Dijkstraheap(g,5,2)
-# Kruskal(g,5,4)
+# DijkstraNoheap(g,2,3)
+# Dijkstraheap(g,2,3)
+# Kruskal(g,2,3)

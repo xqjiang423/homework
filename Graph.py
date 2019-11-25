@@ -12,12 +12,13 @@ class Graph:
 
     def randominit(self):
         for i in range(self.v):
-            weight = random.randint(1, 1000)
+            weight = (random.random()+0.01)*1000
             self.adjlist.setdefault(i,[]).append([(i+1)%self.v,weight])
             self.adjlist.setdefault((i+1)%self.v,[]).append([i,weight])
             self.e+=1
+            self.alledges[i, (i+1)%self.v] = weight
 
-    def addedge(self,u,v,weight=random.randint(1, 1000)):
+    def addedge(self,u,v,weight):
         #pass
         if self.v==0:
             raise ValueError("can not add edge to the empty graph!")
@@ -25,6 +26,7 @@ class Graph:
         self.adjlist.setdefault(v,[]).append([u,weight])
         self.e+=1
         self.alledges[u,v]=weight
+
     def edgeexist(self,u,v):
         flag=False
         for edges in self.adjlist[v]:
@@ -40,11 +42,3 @@ class Graph:
         for value in self.adjlist.values():
             degree += len(value)
         return degree
-
-    # def alledges(self):
-    #     edges={}
-    #     for key, item in self.adjlist.items():
-    #         for edge in item:
-    #             if (edge[0], key) not in list(edges.keys()):
-    #                 edges[key,edge[0]]=edge[1]
-    #     return edges
