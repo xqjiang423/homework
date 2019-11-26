@@ -29,14 +29,6 @@ class MaxHeap:
             self.swap(int(i/2),i)
             i=int(i/2)
 
-    # def Delete(self,h):
-    #     h=self.H.index(h)#h must >=1
-    #     self.swap(h,self.n)
-    #     del self.H[self.n]
-    #     del self.D[self.n]
-    #     if self.n>=1:
-    #         self.n -= 1
-    #         self.fixHeap(h,self.n)
     def Delete(self, h):
         h = self.H.index(h)
         self.H[h] = self.H[self.n]
@@ -46,7 +38,6 @@ class MaxHeap:
         if h<self.n:
             if self.n >= 1:
                 self.n -= 1
-
             self.fixHeap2(h, self.n)
         else:
             self.n-=1

@@ -1,7 +1,7 @@
 import Graph
 import randomgraph
 import Heap
-
+import time
 def DijkstraNoheap(g,s,t):
     n=g.v
     status={}#unseen, intree, fringe
@@ -54,7 +54,6 @@ def Dijkstraheap(g,s,t):
     for v in range(n):
         status[v]="unseen"
     status[s]="intree"
-
     for edge in g.adjlist[s]:
         status[edge[0]]="fringe"
         wt[edge[0]]=edge[1]
@@ -105,13 +104,8 @@ def Kruskal(g,s,t):
             rank[u]+=1
     def Find(v):
         w=v
-        s=[]
         while dad[w]!=-1:
             w=dad[w]
-        #     s.append(w)
-        # while(len(s)):
-        #     v=s.pop()
-        #     dad[v]=w
         return w
     def MakeSet(v):
         dad[v]=-1
@@ -121,14 +115,19 @@ def Kruskal(g,s,t):
     heap = Heap.MaxHeap()
     edges=g.alledges.items()
     #print(edges)
+    #start_time = time.time()
     for edge,w in edges:
         heap.H.append(edge)
         heap.D.append(w)
         heap.n+=1
-    #print("finish init")
+    #end_time = time.time()
+    #print("finish init%f"%(end_time - start_time))
     #sort
     sorted_edge=[]
+    #start_time = time.time()
     heap.HeapSort()
+    #end_time = time.time()
+    #print("finish heapsort%f" % (end_time - start_time))
     for i in range(1,heap.n+1):
         sorted_edge.append((heap.H[i],heap.D[i]))
     #print(sorted_edge)
